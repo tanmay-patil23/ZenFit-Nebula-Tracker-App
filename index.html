@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenFit - Space Fitness Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- Tarantula Nebula 3D Background -->
+    <div id="nebula-container"></div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header glass-morphism">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">🌌</div>
+                    <h1>ZenFit</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-level">
+                        <span class="level-badge">Lv.<span id="current-level">1</span></span>
+                        <div class="xp-bar-container">
+                            <div class="xp-bar" id="xp-bar"></div>
+                            <span class="xp-text" id="xp-text">0/100 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="main-nav glass-morphism">
+            <button class="nav-btn active" data-view="dashboard">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-btn" data-view="workout">
+                <span class="nav-icon">💪</span>
+                <span class="nav-label">Workout</span>
+            </button>
+            <button class="nav-btn" data-view="progress">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Progress</span>
+            </button>
+            <button class="nav-btn" data-view="badges">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-label">Badges</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <section class="view active" id="dashboard-view">
+                <div class="dashboard-grid">
+                    <!-- Stats Cards -->
+                    <div class="stat-card glass-morphism">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="current-streak">0</div>
+                            <div class="stat-label">Day Streak</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass-morphism">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="total-xp">0</div>
+                            <div class="stat-label">Total XP</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass-morphism">
+                        <div class="stat-icon">🏃</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="total-workouts">0</div>
+                            <div class="stat-label">Workouts</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass-morphism">
+                        <div class="stat-icon">🏅</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="badges-earned">0</div>
+                            <div class="stat-label">Badges</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions glass-morphism">
+                        <h3>Quick Start</h3>
+                        <div class="quick-buttons">
+                            <button class="quick-btn" data-category="Cardio" data-exercise="Running" data-duration="30">
+                                <span class="quick-icon">🏃</span>
+                                <div class="quick-text">
+                                    <span class="quick-title">Running</span>
+                                    <span class="quick-subtitle">30 min</span>
+                                </div>
+                            </button>
+                            <button class="quick-btn" data-category="Strength" data-exercise="Push-ups" data-duration="20">
+                                <span class="quick-icon">💪</span>
+                                <div class="quick-text">
+                                    <span class="quick-title">Push-ups</span>
+                                    <span class="quick-subtitle">20 min</span>
+                                </div>
+                            </button>
+                            <button class="quick-btn" data-category="Flexibility" data-exercise="Yoga" data-duration="25">
+                                <span class="quick-icon">🧘</span>
+                                <div class="quick-text">
+                                    <span class="quick-title">Yoga</span>
+                                    <span class="quick-subtitle">25 min</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Badges -->
+                    <div class="recent-badges glass-morphism">
+                        <h3>Recent Achievements</h3>
+                        <div class="badge-preview" id="recent-badges">
+                            <p class="no-badges">Complete your first workout to earn badges!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workout View -->
+            <section class="view" id="workout-view">
+                <div class="workout-form glass-morphism">
+                    <h2>Log Workout</h2>
+                    <form id="workout-form">
+                        <div class="form-group">
+                            <label class="form-label">Exercise Category</label>
+                            <div class="category-grid">
+                                <button type="button" class="category-btn" data-category="Cardio">
+                                    <span class="category-icon">🏃</span>
+                                    <span class="category-name">Cardio</span>
+                                </button>
+                                <button type="button" class="category-btn" data-category="Strength">
+                                    <span class="category-icon">💪</span>
+                                    <span class="category-name">Strength</span>
+                                </button>
+                                <button type="button" class="category-btn" data-category="Flexibility">
+                                    <span class="category-icon">🧘</span>
+                                    <span class="category-name">Flexibility</span>
+                                </button>
+                                <button type="button" class="category-btn" data-category="Sports">
+                                    <span class="category-icon">⚽</span>
+                                    <span class="category-name">Sports</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="exercise-group" style="display: none;">
+                            <label class="form-label">Exercise Type</label>
+                            <select class="form-control" id="exercise-select" required>
+                                <option value="">Select an exercise</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Duration (minutes)</label>
+                                <input type="number" class="form-control" id="duration-input" min="1" max="300" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Estimated XP</label>
+                                <div class="xp-preview" id="xp-preview">0 XP</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Notes (optional)</label>
+                            <textarea class="form-control" id="notes-input" rows="3" placeholder="How did the workout feel?"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn--primary btn--full-width">
+                            Complete Workout
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Progress View -->
+            <section class="view" id="progress-view">
+                <div class="progress-cards">
+                    <!-- Level Progress -->
+                    <div class="progress-card glass-morphism">
+                        <h3>Level Progress</h3>
+                        <div class="level-display">
+                            <div class="level-circle">
+                                <span id="level-display">1</span>
+                            </div>
+                            <div class="level-info">
+                                <div class="level-progress-bar">
+                                    <div class="level-progress-fill" id="level-progress"></div>
+                                </div>
+                                <p class="level-text" id="level-text">0 / 100 XP to next level</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workout Chart -->
+                    <div class="progress-card glass-morphism">
+                        <h3>Weekly Activity</h3>
+                        <div class="chart-container" style="position: relative; height: 200px;">
+                            <canvas id="workout-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <div class="progress-card glass-morphism">
+                        <h3>Workout Categories</h3>
+                        <div class="chart-container" style="position: relative; height: 200px;">
+                            <canvas id="category-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Workout History -->
+                    <div class="progress-card glass-morphism">
+                        <h3>Recent Workouts</h3>
+                        <div class="workout-history" id="workout-history">
+                            <p class="no-workouts">No workouts logged yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Badges View -->
+            <section class="view" id="badges-view">
+                <div class="badges-container glass-morphism">
+                    <div class="badges-header">
+                        <h2>Achievements</h2>
+                        <div class="badges-stats">
+                            <span id="badges-count">0</span> / <span id="total-badges">11</span> Earned
+                        </div>
+                    </div>
+                    
+                    <div class="badges-grid" id="badges-grid">
+                        <!-- Badges will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Success Modal -->
+    <div class="modal hidden" id="success-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-morphism">
+            <div class="modal-body">
+                <div class="success-animation">
+                    <div class="success-icon">✨</div>
+                </div>
+                <h3>Workout Complete!</h3>
+                <p>Great job! You earned <span id="earned-xp">0</span> XP</p>
+                <button class="btn btn--primary" id="success-close">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Up Modal -->
+    <div class="modal hidden" id="levelup-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-morphism">
+            <div class="modal-body">
+                <div class="levelup-animation">
+                    <div class="levelup-icon">🎉</div>
+                </div>
+                <h3>Level Up!</h3>
+                <p>Congratulations! You reached level <span id="new-level">2</span>!</p>
+                <button class="btn btn--primary" id="levelup-close">Awesome!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badge Earned Modal -->
+    <div class="modal hidden" id="badge-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-morphism">
+            <div class="modal-body">
+                <div class="badge-animation">
+                    <div class="badge-icon" id="badge-icon">🏆</div>
+                </div>
+                <h3>Badge Earned!</h3>
+                <h4 id="badge-name">Achievement</h4>
+                <p id="badge-description">You've accomplished something great!</p>
+                <button class="btn btn--primary" id="badge-close">Amazing!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
